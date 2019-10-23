@@ -1,27 +1,27 @@
-# Environment Setup
+# 环境设置
 
-Dapr can be run in either Standalone or Kubernetes modes. Running Dapr runtime in Standalone mode enables you to develop Dapr applications in your local development environment and then deploy and run them in other Dapr supported environments. For example, you can develop Dapr applications in Standalone mode and then deploy them to any Kubernetes cluster.
+Dapr可以独立模式或Kubernetes模式运行，以独立方式运行可让你在本地开发环境进行开发然后部署到目标环境。例如，你可以以Dapr独立方式开发应用，然后部署它们到Kubernetes集群。
 
-## Contents
+## 目录
 
- - [Prerequisites](#prerequisites)
- - [Installing Dapr CLI](#installing-dapr-cli)
- - [Installing Dapr in standalone mode](#installing-dapr-in-standalone-mode)
- - [Installing Dapr on Kubernetes cluster](#installing-dapr-on-a-kubernetes-cluster)
+ - [先决条件](#先决条件)
+ - [安装Dapr命令行](#安装Dapr命令行)
+ - [以独立模式安装Dapr](#以独立模式安装Dapr)
+ - [在Kubernetes集群中安装Dapr](#在Kubernetes集群中安装Dapr)
 
-## Prerequisites
+## 先决条件
 
-* Install [Docker](https://docs.docker.com/install/)
+* 安装 [Docker](https://docs.docker.com/install/)
 
-> For Windows user, ensure that `Docker Desktop For Windows` uses Linux containers.
+> 对于Windows用户，请确保 `Docker Desktop For Windows` 使用Linux容器。
 
-## Installing Dapr CLI
+## 安装Dapr命令行
 
-### Using script to install the latest release
+### 使用脚本安装最新版本
 
 **Windows**
 
-Install the latest windows Dapr cli to `c:\dapr` and add this directory to User PATH environment variable.
+安装最新windows Dapr命令行到 `c:\dapr`, 并将此路径添加到PATH环境变量。
 
 ```powershell
 powershell -Command "iwr -useb https://raw.githubusercontent.com/dapr/cli/master/install/install.ps1 | iex"
@@ -29,7 +29,7 @@ powershell -Command "iwr -useb https://raw.githubusercontent.com/dapr/cli/master
 
 **Linux**
 
-Install the latest linux Dapr CLI to `/usr/local/bin`
+安装最新版本linux Dapr命令行到 `/usr/local/bin`
 
 ```bash
 wget -q https://raw.githubusercontent.com/dapr/cli/master/install/install.sh -O - | /bin/bash
@@ -37,32 +37,33 @@ wget -q https://raw.githubusercontent.com/dapr/cli/master/install/install.sh -O 
 
 **MacOS**
 
-Install the latest darwin Dapr CLI to `/usr/local/bin`
+安装最新版本 darwin Dapr 命令行到 `/usr/local/bin`
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/dapr/cli/master/install/install.sh | /bin/bash
 ```
 
-### From the Binary Releases
+### 从二进制发布版本
 
-Each release of Dapr CLI includes various OSes and architectures. These binary versions can be manually downloaded and installed.
+每一个Dapr命令行发布包含多种操作系统和体系架构版本。这些二进制版本可手动下载安装。
 
-1. Download the [Dapr CLI](https://github.com/dapr/cli/releases)
-2. Unpack it (e.g. dapr_linux_amd64.tar.gz, dapr_windows_amd64.zip)
-3. Move it to your desired location.
-   * For Linux/MacOS - `/usr/local/bin`
-   * For Windows, create a directory and add this to your System PATH. For example create a directory called `c:\dapr` and add this directory to your path, by editing your system environment variable.
+1. 下载 [Dapr 命令行](https://github.com/dapr/cli/releases)
+2. 解压 (如 dapr_linux_amd64.tar.gz, dapr_windows_amd64.zip)
+3. 移动其到目标位置.
+   * Linux/MacOS路径为 - `/usr/local/bin`
+   * 针对Windows，创建路径并添加到系统PATH环境变量。例如创建路径 `c:\dapr` ，然后添加此路径到环境path
 
-## Installing Dapr in standalone mode
+## 以独立模式安装Dapr
 
-### Install Dapr runtime using the CLI
-Install Dapr by running `dapr init` from a command prompt
+### 使用命令行方式安装Dapr运行时
 
-> For Linux users, if you run your docker cmds with sudo, you need to use "**sudo dapr init**"
+在命令提示行中运行 `dapr init` 命令来安装Dapr运行时
 
-> For Windows users, make sure that you run the cmd terminal in administrator mode
+> 对于Linux用户, 如果你是使用sudo方式运行的docker命令，你需要使用 "**sudo dapr init**"
 
-> **Note:** See [Dapr CLI](https://github.com/dapr/cli) for details on the usage of Dapr CLI
+> 对于Windows用户, 请确保你是以管理员方式启动的命令行终端
+
+> **注意:** 参考 [Dapr 命令行](https://github.com/dapr/cli) 了解更多命令行使用细节
 
 ```bash
 $ dapr init
@@ -71,86 +72,86 @@ Downloading binaries and setting up components
 ✅  Success! Dapr is up and running
 ```
 
-To see that Dapr has been installed successful, from a command prompt run the `docker ps` command and check that the `daprio/dapr:latest` and `redis` container images are both running.
+要检查Dapr是否安装成功，从命令行运行 `docker ps` 命令，检查 `daprio/dapr:latest` 以及 `redis` 容器已正常运行。
 
-### Install a specific runtime version
+### 安装特定的运行时版本
 
-You can install or upgrade to a specific version of the Dapr runtime using `dapr init --runtime-version`. You can find the list of versions in [Dapr Release](https://github.com/dapr/dapr/releases).
+你可以安装或更新Dapr运行时到一个特定版本，通过使用 `dapr init --runtime-version`命令，你可以在 [Dapr 发布](https://github.com/dapr/dapr/releases)中找到版本列表。
 
 ```bash
-# Install v0.1.0 runtime
+# 按照 v0.1.0 运行时
 $ dapr init --runtime-version 0.1.0
 
-# Check the versions of cli and runtime
+# 检查命令行和运行时的版本
 $ dapr --version
 cli version: v0.1.0
 runtime version: v0.1.0
 ```
 
-### Uninstall Dapr in a standalone mode
+### 在独立模式中卸载Dapr运行时
 
-Remove placement docker container.
+释放Dapr容器.
 
 ```bash
 $ dapr uninstall
 ```
 
-## Installing Dapr on a Kubernetes cluster
+## 在Kubernetes集群中安装Dapr
 
-When setting up Kubernetes you can do this either via the Dapr CLI or Helm
+在Kubernetes中你可以通过命令行或Helm方式进行安装
 
-### Setup Cluster
+### 设置集群
 
-* [Setup Minikube Cluster](./cluster/setup-minikube.md)
-* [Setup Azure Kubernetes Service Cluster](./cluster/setup-aks.md)
+* [设置 Minikube 集群](./cluster/setup-minikube.md)
+* [设置 Azure Kubernetes Service 集群](./cluster/setup-aks.md)
 
-### Using the Dapr CLI
+### 使用Dapr命令行方式
 
-You can install Dapr to Kubernetes cluster using CLI.
+你可以通过命令行部署Dapr到Kubernetes
 
-#### Install Dapr to Kubernetes
+#### 在Kubernetes中安装Dapr Install Dapr to Kubernetes
 
 ```bash
 $ dapr init --kubernetes
-ℹ️  Note: this installation is recommended for testing purposes. For production environments, please use Helm
+ℹ️  注意: 此种方式建议在测试的时候使用，对于生成环境，请使用Helm方式
 
 ⌛  Making the jump to hyperspace...
 ✅  Deploying the Dapr Operator to your cluster...
 ✅  Success! Dapr has been installed. To verify, run 'kubectl get pods -w' in your terminal
 ```
 
-Dapr CLI installs Dapr to `default` namespace of Kubernetes cluster.
+Dapr命令行安装Dapr到 `default` 命名空间
 
-#### Uninstall Dapr on Kubernetes
+#### 在Kubernetes中卸载Dapr
 
 ```bash
 $ dapr uninstall --kubernetes
 ```
 
-### Using Helm (Advanced)
+### 使用Helm (高级)
 
-You can install Dapr to Kubernetes cluster using a Helm chart.
+你可以通过Helm chart部署Dapr到Kubernetes集群
 
-#### Install Dapr to Kubernetes
+#### 安装Dapr到Kubernetes
 
-1. Make sure Helm is initialized in your running Kubernetes cluster.
+1. 确保Kubernetes集群中已经初始化了Helm
 
-2. Add Azure Container Registry as a Helm repo
+2. 添加Azure Container Registry Helm仓库
 
 ```bash
 helm repo add dapr https://daprio.azurecr.io/helm/v1/repo
 helm repo update
 ```
 
-3. Install the Dapr chart on your cluster in the `dapr-system` namespace
+3. 安装Dapr chart 到集群的 `dapr-system` 命名空间
 
 ```bash
 helm install dapr/dapr --name dapr --namespace dapr-system
 ```
 
-#### Verify installation
+#### 安装验证
 
-Once the chart installation is complete, verify the dapr-operator, dapr-placement and dapr-sidecar-injector pods are running in the `dapr-system` namespace:
+一旦chart安装完成，确认`dapr-system` 命名空间下的dapr-operator, dapr-placement 以及 dapr-sidecar-injector Pod 运行正常
 
 ```bash
 $ kubectl get pods -n dapr-system -w
@@ -161,10 +162,10 @@ dapr-placement-7f8f76778f-6vhl2          1/1       Running   0          40s
 dapr-sidecar-injector-8555576b6f-29cqm   1/1       Running   0          40s
 ```
 
-#### Uninstall Dapr on Kubernetes
+#### 从Kubernetes集群卸载Dapr
 
 ```bash
 helm del --purge -n dapr
 ```
 
-> **Note:** See [here](https://github.com/dapr/dapr/blob/master/charts/dapr/README.md) for details on Dapr helm charts.
+> **注意:** 参考 [此处](https://github.com/dapr/dapr/blob/master/charts/dapr/README.md) 了解 Dapr helm charts详情

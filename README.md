@@ -10,7 +10,7 @@
 - **[最佳实践](./howto)** - 有关Dapr的最佳实践指南 [调试及故障排除](https://github.com/dapr/docs/tree/master/best-practices/troubleshooting)
 - **[参考](./reference)** - 参考文档
 
- ### SDKs
+### SDKs
 
  - **[Go SDK](https://github.com/dapr/go-sdk)** - 在Go中使用Dapr客户端
  - **[Java SDK](https://github.com/dapr/java-sdk)** - 在Java中使用Dapr客户端
