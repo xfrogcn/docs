@@ -1,73 +1,71 @@
 
-# Dapr overview
+# Dapr概览
 
-Dapr is a portable, event-driven runtime that makes it easy for enterprise developers to build resilient, microservice stateless and stateful applications that run on the cloud and edge and embraces the diversity of languages and developer frameworks.
+Dapr是一种可移植的，事件驱动的运行时，企业开发者通过它可快速地构建弹性的、有状态或无状态的微服务应用，这些应用可运行在云或边缘，并支持语言与框架的多样性。
 
-## Any language, any framework, anywhere
+## 跨语言, 跨框架, 跨环境
 
-Today we are experiencing a wave of cloud adoption. Developers are comfortable with web + database application architectures (for example classic 3-tier designs) but not with microservice application architectures which are inherently distributed. It’s hard to become a distributed systems expert, nor should you have to. Developers want to focus on business logic, while leaning on the platforms to imbue their applications with scale, resiliency, maintainability, elasticity and the other attributes of cloud-native architectures.
+今天，我们正在经历一波云应用的浪潮，熟悉web+数据库传统架构的开发人员（如经典的3层架构）可能对于本质上是分布式应用的微服务架构感到困难。他们很难成为分布式系统的专家，也不应该成为，开发者希望聚焦于业务逻辑，而对于规模、弹性、可维护、以及其他云原生架构的能力应该由平台来注入。
 
-This is where Dapr comes in. Dapr codifies the *best practices* for building microservice applications into open, independent, building blocks that enable you to build portable applications with the language and framework of your choice. Each building block is completely independent and you can use one, some, or all of them in your application.
+这就是Dapr的用武之地，Dapr提供构建开放、独立的微服务应用的*最佳实践*，这些构件块可让你使用你所选择的语言或框架来构建可移植应用。每一个构件块都是完全独立的，你可以在你的应用中使用一个、部分或者所有。
 
-In addition Dapr is platform agnostic meaning you can run your applications locally, on any Kubernetes cluster, and other hosting environments that Dapr integrates with. This enables you to build microservice applications that can run on the cloud and edge.
+此外，Dapr是平台无关的，这意味着你可以在本地、任何Kubernetes集群以及其他集成Dapr的托管环境中运行，这可以让你的微服务应用运行在云或边缘节点上。
 
-Using Dapr you can easily build microservice applications using any language, any framework, and run them anywhere.
+使用Dapr，你可以使用任何语言、任何框架构建你的微服务应用，并将它运行在任何环境中。
 
-## Microservice building blocks for cloud and edge
+## 云与边缘计算微服务的构建基础
 
-There are many considerations when architecting microservices applications. Dapr provides best practices for common capabilities when building microservice applications that developers can use in a standard way and deploy to any environment. It does this by providing distributed system building blocks.
+在设计微服务架构的应用时需要考虑很多的问题，Dapr为微服务应用提供公共能力的最佳实践，开发人员可按标准方式使用这些能力并部署到任何的环境中。Dapr通过提供分布式系统构建块来实现这一目标。
 
-Each of these building blocks is independent, meaning that you can use one, some or all of them in your application. In this initial release of Dapr, the following building blocks are provided:
+这些构建块是独立的，你可以在应用中使用一个、部分或所有。在这个初始版本中，Dapr提供以下构建块：
 
-• **Service invocation** Resilient service-to-service invocation enables method calls, including retries, on remote services wherever they are located in the supported hosting environment.
+• **服务调用** 弹性的服务到服务的端到端调用支持方法调用，包括重试，而不管这些服务位于所支持的那个托管环境中。
 
-• **State Management** With state management for storing key/value pairs, long running, highly available, stateful services can be easily written alongside stateless services in your application. The state store is pluggable and can include Azure CosmosDB, AWS DynamoDB or Redis among others.
+• **状态管理** 通过状态管理来存储键值对状态，可以轻松地在应用程序中与无状态服务一起编写长时间运行的，高可用的有状态服务。状态的存储是插件化的，可以使用Azure CosmosDB, AWS DynamoDB 或者 Redis等其他方式。
 
-• **Publish and subscribe messaging between services** Publishing events and subscribing to topics between services enables event-driven architectures to simplify horizontal scalability and make them resilient to failure. Dapr provides at least once message delivery guarantee.
+• **服务之间消息的发布与订阅** 在服务间发布订阅主题的事件驱动架构，可方便地实现水平扩展以及故障弹性。 Dapr提供至少一次的消息传送保证。
 
-• **Event driven resource bindings** Resource bindings with triggers builds further on event-driven architectures for scale and resiliency by receiving and sending events to and from any external resource such as databases, queues, file systems, etc.
+• **事件驱动资源绑定** 通过向任何外部资源(如数据库、队列、文件系统等)接收和发送事件，在事件驱动的体系结构上进一步构建具有伸缩性和弹性的资源绑定。
 
-•**Distributed tracing between services** Dapr supports distributed tracing to easily diagnose and observe inter-service calls in production using the W3C Trace Context standard.
+• **服务间的分布式追踪** Dapr支持符合W3C Trace Context标准的分布式跟踪，可方便地观察和诊断生产中的服务调用。
 
-•**Actors** A pattern for stateful and stateless objects that make concurrency simple with method and state encapsulation. Dapr provides many capabilities in its actor runtime including concurrency, state, life-cycle management for actor activation/deactivation and timers and reminders to wake-up actors.
+• **角色** 针对有状态或无状态对象的角色模式，通过方法和状态封装简化了并发处理。Dapr通过角色运行时提供了包括并发、状态、激活/失活生命周期管理以及定时器、提醒器来唤醒角色。
 
+下图展示了由Dapr提供的分布式系统构建块，它通过标准API接口公开，开发者在其代码中可通过http或gRPC来调用。Dapr可与任何托管平台集成，例如Kubernetes，可使应用具有跨云与边缘的可移植性。
 
-The diagram below shows the distributed system building blocks provides by Dapr, exposed with standard APIs. These APIs can be used from any developer code over http or gRPC. Dapr integrates with any hosting platform, for example Kubernetes, to enable application portability including across cloud and edge.
+![Dapr 概览](images/overview.png)
 
-![Dapr overview](images/overview.png)
+## Sidecar架构
 
-## Sidecar architecture
+Dapr通过sidecar架构导出其API，无论是通过容器还是进程，无需在应用代码中包含任何Dapr运行时。这使Dapr易于与其他运行时集成，并提供了应用程序逻辑分离，提高了可移植性。
 
-Dapr exposes its APIs as a sidecar architecture, either as a container or as a process, not requiring the application code to include any Dapr runtime code. This makes integration with Dapr easy from other runtimes, as well as providing separation of the application logic for improved supportability. 
+![Dapr 概览](images/overview-sidecar.png)
 
-![Dapr overview](images/overview-sidecar.png)
+在基于容器的托管环境，如Kubernetes，Daper以sidecar容器的方式运行，与应用容器在同一个Pod中。
 
-In container hosting environments such a Kubernetes, Dapr runs as a side-car container with the application container in the same pod.
+![Dapr 概览](images/overview-sidecar-kubernetes.png)
 
-![Dapr overview](images/overview-sidecar-kubernetes.png)
+## 开发语言SDK及框架
 
-## Developer language SDKs and frameworks 
+为了在特定语言中更自然地使用Dapr，Dapr提供了Go、Java、Javascript、.NET以及Python等语言的SDK。这些SDK导出Dapr构建块的功能，如保存状态、发布事件或创建一个角色，这些操作通过特定语言类型化的方式导出而不用直接调用http/gRPC API的方式。这允许你在你所选择的语言中同时编写无状态、有状态以及角色功能。由于这些SDK共享Dapr运行时，所以你可以获得跨语言的actor和功能支持。
 
-To make using Dapr more natural for different languages, it also includes language specific SDKs for Go, Java, JavaScript, .NET and Python. These SDKs expose the functionality in the Dapr building blocks, such as saving state, publishing an event or creating an actor, through a typed, language API rather than calling the http/gRPC API. This enables you to write a combination of stateless and stateful functions and actors all in the language of their choice. And because these SDKs share the Dapr runtime, you get cross-language actor and functions support.
+此外，Dapr可以和任何开发框架集成，例如，通过Dapr[.NET SDK](https://github.com/dapr/dotnet-sdk)，你可以与ASP.NET Core集成, 它引入了有状态的路由控制器来响应其他服务的发布/订阅事件。
 
-Furthermore, Dapr can be integrated with any developer framework. For example, in the Dapr [.NET SDK](https://github.com/dapr/dotnet-sdk) you can find ASP.NET Core integration, which brings stateful routing controllers that respond to pub/sub events from other services.
+## 在本地开发机器上以独立方式运行Dapr
 
-## Running Dapr on a local developer machine in Standalone mode
+Dapr可运行在你的本地开发机器, 通过[独立模式](./getting-started)。每一个运行的服务都有一个Dapr运行时，该进程被配置为使用状态存储，发布/订阅以及组件绑定。
 
-Dapr can be configured to run on your local developer machine in [Standalone mode](./getting-started). Each running service has a Dapr runtime process which is configured to use state stores, pub/sub and binding components.  
+你可以通过 [Dapr命令行](https://github.com/dapr/cli) 来运行本地服务.
 
-You can use the [Dapr CLI](https://github.com/dapr/cli) to run services locally.
+![Dapr 概览](images/overview_standalone.png)
 
-![Dapr overview](images/overview_standalone.png)
+## 以Kubernetes模式运行Dapr 
 
-## Running Dapr in Kubernetes mode 
+Dapr可配置运行在任何[Kubernetes 集群](https://github.com/dapr/samples/tree/master/2.hello-kubernetes). 在Kubernetes中， *dapr-sidecar-injector* 以及 *dapr-operator* 服务提供与Kubernetes环境的集成，将Dapr运行时以sidecar方式注入到应用Pod中，同时提供Dapr组件更新的通知，这些更新将自动分发到集群中。
 
-Dapr can be configured to run on any [Kubernetes cluster](https://github.com/dapr/samples/tree/master/2.hello-kubernetes). In Kubernetes the *dapr-sidecar-injector* and *dapr-operator* services provide first class integration to launch Dapr as a sidecar container in the same pod as the service and provides notifications of Dapr component updates provisioned into the cluster.
- 
+![Dapr 概览](images/overview_kubernetes.png)
 
-![Dapr overview](images/overview_kubernetes.png)
-
-In order to give your service an id and port known to Dapr and launch the Dapr sidecar container, you simply annotate your deployment like this.
+为了让Dapr知道你的服务、id以及端口并注入sidecar，你需要在你的应用部署中添加以下注释：
 
       annotations:
         dapr.io/enabled: "true"
