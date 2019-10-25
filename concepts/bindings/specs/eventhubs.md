@@ -1,4 +1,4 @@
-# Azure EventHubs Binding Spec
+# Azure EventHubs绑定规范
 
 ```
 apiVersion: dapr.io/v1alpha1
@@ -10,12 +10,12 @@ spec:
   metadata:
   - name: connectionString
     value: https://<address>
-  - name: consumerGroup  # Optional
+  - name: consumerGroup  # 可选
     value: group1
   - name: messageAge
-    value: 5s         # Optional. Golang duration
+    value: 5s         # 可选. Golang duration规则
 ```
 
-`connectionString` is the EventHubs connection string.
-`consumerGroup` is the name of an EventHubs consumerGroup to listen on.
-`messageAge` allows to receive messages that are not older than the specified age.
+`connectionString` 连接字符串.  
+`consumerGroup` 监听的EventHubs消费者组.  
+`messageAge` 允许接收的消息，不可在据此时长之前

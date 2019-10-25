@@ -18,7 +18,7 @@ spec:
     value: mytopic
 ```
 
-`region` is the AWS region.
-`accessKey` is the AWS access key.
-`secretKey` is the AWS secret key.
-`topicArn` is the SNS topic name.
+`region` AWS区域  
+`accessKey` AWS 访问密钥  
+`secretKey` AWS 机密密钥  
+`topicArn` SNS主题名称

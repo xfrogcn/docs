@@ -1,4 +1,4 @@
-# Azure Service Bus Queues Binding Spec
+# Azure Service Bus Queues绑定规范
 
 ```
 apiVersion: dapr.io/v1alpha1
@@ -14,5 +14,5 @@ spec:
     value: queue1
 ```
 
-`connectionString` is the Service Bus connection string.
-`queueName` is the Service Bus queue name.
+`connectionString`Service Bus连接字符串.  
+`queueName`  Service Bus队列名称.

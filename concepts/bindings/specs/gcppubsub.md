@@ -1,4 +1,4 @@
-# GCP Cloud Pub/Sub Binding Spec
+# GCP Cloud Pub/Sub绑定规范
 
 ```
 apiVersion: dapr.io/v1alpha1
@@ -34,15 +34,15 @@ spec:
     value: PRIVATE KEY
 ```
 
-`topic` is the Pub/Sub topic name.
-`subscription` is the Pub/Sub subscription name.
-`type` is the GCP credentials type.
-`project_id` is the GCP project id.
-`private_key_id` is the GCP private key id.
-`client_email` is the GCP client email.
-`client_id` is the GCP client id.
-`auth_uri` is Google account OAuth endpoint.
-`token_uri` is Google account token uri.
-`auth_provider_x509_cert_url` is the GCP credentials cert url.
-`client_x509_cert_url` is the GCP credentials project x509 cert url.
-`private_key` is the GCP credentials private key.
+`topic` 发布/订阅的主题名称.  
+`subscription` 发布/订阅的订阅名称.  
+`type` GCP凭证类型.  
+`project_id` GCP项目id.  
+`private_key_id` GCP西游密钥id.  
+`client_email` GCP客户端电邮.  
+`client_id` GCP客户端id.  
+`auth_uri` Google账户OAuth终结点.  
+`token_uri` Google账户令牌uri.  
+`auth_provider_x509_cert_url` GCP凭证证书url.  
+`client_x509_cert_url` GCP凭证项目x509证书url.  
+`private_key` GCP凭证私有密钥.

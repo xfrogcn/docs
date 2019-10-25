@@ -1,4 +1,4 @@
-# RabbitMQ Binding Spec
+# RabbitMQ绑定规范
 
 ```
 apiVersion: dapr.io/v1alpha1
@@ -18,7 +18,7 @@ spec:
     value: false
 ```
 
-`queueName` is the RabbitMQ queue name.
-`host` is the RabbitMQ host address.
-`durable` tells RabbitMQ to persist message in storage.
-`deleteWhenUnused` enables or disables auto-delete.
+`queueName` RabbitMQ队列名  
+`host` RabbitMQ地址  
+`durable` RabbitMQ持久化消息到存储中  
+`deleteWhenUnused` 启用或禁止自动删除  

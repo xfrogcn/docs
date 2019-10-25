@@ -1,4 +1,4 @@
-# Azure CosmosDB Binding Spec
+# Azure CosmosDB绑定规范
 
 ```
 apiVersion: dapr.io/v1alpha1
@@ -20,8 +20,8 @@ spec:
     value: message
 ```
 
-`url` is the CosmosDB url.
-`masterKey` is the CosmosDB account master key.
-`database` is the name of the CosmosDB database.
-`collection` is name of the collection inside the database.
-`partitionKey` is the name of the partitionKey to extract from the payload.
+`url` CosmosDB连接地址.  
+`masterKey` CosmosDB账户主Key.  
+`database` CosmosDB数据库名称.  
+`collection` 数据库中的集合名称.  
+`partitionKey` 负载中有效分区名称.

@@ -1,4 +1,4 @@
-# Kubernetes Events Binding Spec
+# Kubernetes Events绑定规范
 
 ```
 apiVersion: dapr.io/v1alpha1
@@ -12,4 +12,4 @@ spec:
     value: default
 ```
 
-`namespace` is the Kubernetes namespace to read events from. Default is `default`.
+`namespace` 从中读取事件的Kubernetes命名空间. 默认为 `default`.

@@ -14,5 +14,5 @@ spec:
     value: **************
 ```
 
-`redisHost` is the Redis host address.
-`redisPassword` is the Redis password.
+`redisHost` Redis地址.  
+`redisPassword` Redis密码.

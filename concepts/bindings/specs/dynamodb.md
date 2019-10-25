@@ -1,4 +1,4 @@
-# AWS DynamoDB Binding Spec
+# AWS DynamoDB绑定规范
 
 ```
 apiVersion: dapr.io/v1alpha1
@@ -18,7 +18,7 @@ spec:
     value: items
 ```
 
-`region` is the AWS region.
-`accessKey` is the AWS access key.
-`secretKey` is the AWS secret key.
-`table` is the DynamoDB table name.
+`region` AWS区域.  
+`accessKey` AWS访问密钥.  
+`secretKey`  AWS机密密钥.  
+`table` DynamoDB表名称.

@@ -1,4 +1,4 @@
-# HTTP Binding Spec
+# HTTP绑定规范
 
 ```
 apiVersion: dapr.io/v1alpha1
@@ -14,5 +14,5 @@ spec:
     value: GET
 ```
 
-`url` is the HTTP url to invoke.
-`method` is the HTTP verb to use for the request.
+`url` 调用的HTTP url.  
+`method` 调用请求方法.

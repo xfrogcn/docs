@@ -1,4 +1,4 @@
-# Azure Blob Storage Binding Spec
+# Azure Blob Storage绑定规范
 
 ```
 apiVersion: dapr.io/v1alpha1
@@ -16,6 +16,6 @@ spec:
     value: container1
 ```
 
-`storageAccount` is the Blob Storage account name.
-`storageAccessKey` is the Blob Storage access key.
-`container` is the name of the Blob Storage container to write to.
+`storageAccount` Blob Storage账户名.  
+`storageAccessKey` Blob Storage访问密钥.  
+`container` 写入的Blob Storage容器名称.

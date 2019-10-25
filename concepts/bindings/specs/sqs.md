@@ -1,4 +1,4 @@
-# AWS SQS Binding Spec
+# AWS SQS 绑定规范
 
 ```
 apiVersion: dapr.io/v1alpha1
@@ -18,7 +18,7 @@ spec:
     value: items
 ```
 
-`region` is the AWS region.
-`accessKey` is the AWS access key.
-`secretKey` is the AWS secret key.
-`queueName` is the SQS queue name.
+`region` AWS区域  
+`accessKey` AWS 访问密钥  
+`secretKey` AWS 机密密钥  
+`queueName` SQS 队列名

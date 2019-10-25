@@ -1,4 +1,4 @@
-# GCP Storage Bucket Spec
+# GCP Storage绑定规范
 
 ```
 apiVersion: dapr.io/v1alpha1
@@ -32,14 +32,14 @@ spec:
     value: PRIVATE KEY
 ```
 
-`bucket` is the bucket name.
-`type` is the GCP credentials type.
-`project_id` is the GCP project id.
-`private_key_id` is the GCP private key id.
-`client_email` is the GCP client email.
-`client_id` is the GCP client id.
-`auth_uri` is Google account oauth endpoint.
-`token_uri` is Google account token uri.
-`auth_provider_x509_cert_url` is the GCP credentials cert url.
-`client_x509_cert_url` is the GCP credentials project x509 cert url.
-`private_key` is the GCP credentials private key.
+`bucket` 桶名称.  
+`type` GCP凭证类型.  
+`project_id` GCP项目id.  
+`private_key_id` GCP 私有密钥id.  
+`client_email` GCP 客户端电邮.  
+`client_id` GCP客户端id.  
+`auth_uri` Google账户oauth终结点.  
+`token_uri` Google账户令牌uri.  
+`auth_provider_x509_cert_url` GCP 凭证证书url.  
+`client_x509_cert_url` GCP凭证项目x509证书url.  
+`private_key` GCP 凭证私有Key.  
