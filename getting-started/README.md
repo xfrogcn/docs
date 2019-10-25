@@ -12,7 +12,7 @@ Dapr是一种可移植的，事件驱动的运行时，企业开发者通过它�
 
 ## 设置开发环境
 
-Dapr可在本地或Kubernetes上运行。我们推荐从本地安装Dapr开始来了解Daper的核心概念以及熟悉Dapr命令行。按照以下的说明进行操作 [配置本地Dapr](./environment-setup.md#prerequisites) or [在Kubernetes中](./environment-setup.md#installing-dapr-on-a-kubernetes-cluster).
+Dapr可在本地或Kubernetes上运行。我们推荐从本地安装Dapr开始来了解Daper的核心概念以及熟悉Dapr命令行。按照以下的说明进行操作 [配置本地Dapr](./environment-setup.md#先决条件) or [在Kubernetes中](./environment-setup.md#在Kubernetes集群中安装Dapr).
 
 ## 接下来
 
