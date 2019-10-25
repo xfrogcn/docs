@@ -1,4 +1,4 @@
-# Dapr Quickstarts and Samples
+# Dapr快速开始及示例
 
- - The **[Dapr Samples repo](https://github.com/dapr/samples/blob/master/README.md)** has samples for getting started building applications
+ - 参考 **[Dapr示例仓库](https://github.com/dapr/samples/blob/master/README.md)** 开始构建Dapr应用
  

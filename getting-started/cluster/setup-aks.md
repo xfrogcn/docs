@@ -1,62 +1,62 @@
 
-# Set up an Azure Kubernetes Service cluster
+# 配置 Azure Kubernetes Service 集群
 
-## Prerequisites
+## 先决条件
 
 - [Docker](https://docs.docker.com/install/)
 - [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 - [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
 
-## Deploy an Azure Kubernetes Service cluster
+## 部署 Azure Kubernetes Service 集群
 
-This guide walks you through installing an Azure Kubernetes Service cluster. If you need more information, refer to [Quickstart: Deploy an Azure Kubernetes Service (AKS) cluster using the Azure CLI](https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough)
+以下向导可帮助你安装一个Azure Kubernetes Service集群，如果你想了解详情，可参考[快速开始: 使用Azure命令行部署Azure Kubernetes Service (AKS) 集群](https://docs.microsoft.com/en-us/azure/aks/kubernetes-walkthrough)
 
-1. Login to Azure
+1. 登陆到Azure
 ```bash
 az login
 ```
 
-2. Set the default subscription
+2. 设置默认订阅
 ```bash
 az account set -s [your_subscription_id]
 ```
 
-3. Create a resource group
+3. 创建一个资源组
 
 ```bash
 az group create --name [your_resource_group] --location [region]
 ```
 
-4. Create an Azure Kubernetes Service cluster
-Use 1.13.x or newer version of Kubernetes with `--kubernetes-version`
+4. 创建Azure Kubernetes Service集群
+ 使用`--kubernetes-version`参数指定1.13.x或新版本的Kubernetes 
 
-> **Note:** [1.16.x Kubernetes doesn't work with helm < 2.15.0](https://github.com/helm/helm/issues/6374#issuecomment-537185486)
+> **注意:** [1.16.x版本的Kubernetes无法使用低于2.15.0版本的Helm](https://github.com/helm/helm/issues/6374#issuecomment-537185486)
 
 ```bash
 az aks create --resource-group [your_resource_group] --name [your_aks_cluster_name] --node-count 2 --kubernetes-version 1.14.6 --enable-addons http_application_routing --enable-rbac --generate-ssh-keys
 ```
 
-5. Get the access credentials for the Azure Kubernetes cluster
+5. 获取Azure Kubernetes集群的访问凭证
 
 ```bash
 az aks get-credentials -n [your_aks_cluster_name] -g [your_resource_group]
 ```
 
-## (optional) Install Helm and deploy Tiller
+## (可选) 安装Helm以及部署Tiller
 
-1. [Install Helm client](https://helm.sh/docs/using_helm/#installing-the-helm-client)
+1. [安装Helm客户端](https://helm.sh/docs/using_helm/#installing-the-helm-client)
 
-2. Create the Tiller service account
+2. 创建Tiller服务账号
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/Azure/helm-charts/master/docs/prerequisities/helm-rbac-config.yaml
 ```
 
-3. Run the following to install Tiller into the cluster
+1. 运行以下命令安装Tiller到集群
 ```bash
 helm init --service-account tiller --history-max 200
 ```
 
-4. Ensure that Tiller is deployed and running
+4. 确保Tiller以及部署和运行
 ```bash
 kubectl get pods -n kube-system
 ```
