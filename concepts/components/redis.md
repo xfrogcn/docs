@@ -1,65 +1,65 @@
-# Redis and Dapr
+# Redis与Dapr
 
-Dapr can use Redis in two ways:
+Dapr可通过两种方式来使用Redis:
 
-1. For state persistence and restoration
-2. For enabling pub/sub async style message delivery
+1. 状态的持久化及恢复
+2. 针对消息传递的一步发布/订阅模式
 
-## Creating a Redis Store
+## 创建Redis存储
 
-Dapr can use any Redis instance - containerized, running on your local dev machine, or a managed cloud service. If you already have a Redis store, move on to the [Configuration](#configuration) section.
+Dapr可以使用任何Redis实例 - 容器化的, 运行在本地开发机上的, 或者是由云服务托管的。如果你已经有了一个Redis存储，请移步到[配置](#configuration) 节点。
 
-### Creating a Redis Cache in your Kubernetes Cluster using Helm
+### 在Kubernetes集群中使用Helm创建Redis缓存
 
-We can use [Helm](https://helm.sh/) to quickly create a Redis instance in our Kubernetes cluster. This approach requires [Installing Helm](https://github.com/helm/helm#install).
+我们可以使用[Helm](https://helm.sh/)在Kubernetes集群中快速创建一个Reids实例。此方式需要[安装Helm](https://github.com/helm/helm#install)。
 
-1. Install Redis into your cluster: `helm install stable/redis --name redis --set image.tag=5.0.5-debian-9-r104`. Note that we're explicitly setting an image tag to get a version greater than 5, which is what Dapr' pub/sub functionality requires. If you're intending on using Redis as just a state store (and not for pub/sub), you do not have to set the image version.
-2. Run `kubectl get pods` to see the Redis containers now running in your cluster.
-3. Add `redis-master:6379` as the `redisHost` in your [redis.yaml](#configuration) file. For example:
+1. 在集群中安装Redis: `helm install stable/redis --name redis --set image.tag=5.0.5-debian-9-r104`。注意，我们通过镜像标签指定使用5以上的Redis版本，这是Dapr发布/订阅功能必须的。如果你只是使用Redis来作为状态存储（而不是发布/订阅），你可无需指定Redis镜像标签。
+2. 运行 `kubectl get pods` 查看Redis是否已经运行。
+3. 在[redis.yaml](#configuration) 文件中设置`redisHost`字段值为`redis-master:6379`。 例如:
     ```yaml
         metadata:
         - name: redisHost
           value: redis-master:6379
     ```
-4. Next, we'll get our Redis password, which is slightly different depending on the OS we're using:
-    - **Windows**: Run `kubectl get secret --namespace default redis -o jsonpath="{.data.redis-password}" > encoded.b64`, which will create a file with your encoded password. Next, run `certutil -decode encoded.b64 password.txt`, which will put your redis password in a text file called `password.txt`. Copy the password and delete the two files.
+4. 接下来, 获取Redis的密码，依据系统不同，获取方式不同：
+    - **Windows**: 运行 `kubectl get secret --namespace default redis -o jsonpath="{.data.redis-password}" > encoded.b64`, 获取到已编码的密码到encoded.b64文件中。 接下来, 运行 `certutil -decode encoded.b64 password.txt`, 解密密码到 `password.txt`文件中。最后，拷贝密码然后删除这两个文件。
 
-    - **Linux/MacOS**: Run `kubectl get secret --namespace default redis -o jsonpath="{.data.redis-password}" | base64 --decode` and copy the outputted password.
+    - **Linux/MacOS**: 运行 `kubectl get secret --namespace default redis -o jsonpath="{.data.redis-password}" | base64 --decode` 然后从输出中拷贝密码。
 
-    Add this password as the `redisPassword` value in your [redis.yaml](#configuration) file. For example:
+    在 [redis.yaml](#configuration) 文件中，设置`redisPassword`字段值为Redis密码。例如:
     ```yaml
         metadata:
         - name: redisPassword
           value: lhDOkwTlp0
     ```
 
-### Creating an Azure Managed Redis Cache
+### 创建由Azure托管的Redis缓存
 
-**Note**: this approach requires having an Azure Subscription.
+**注意**: 此方法必须要有一个Azure订阅。
 
-1. Open [this link](https://ms.portal.azure.com/#create/Microsoft.Cache) to start the Azure Redis Cache creation flow. Log in if necessary.
-2. Fill out necessary information and **check the "Unblock port 6379" box**, which will allow us to persist state without SSL.
-3. Click "Create" to kickoff deployment of your Redis instance.
-4. Once your instance is created, you'll need to grab your access key. Navigate to "Access Keys" under "Settings" and copy your key.
-5. Run `kubectl get svc` and copy the cluster IP of your `redis-master`.
-6. Finally, we need to add our key and our host to a `redis.yaml` file that Dapr can apply to our cluster. If you're running a sample, you'll add the host and key to the provided `redis.yaml`. If you're creating a project from the ground up, you'll create a `redis.yaml` file as specified in [Configuration](#configuration). Set the `redisHost` key to `[IP FROM PREVIOUS STEP]:6379` and the `redisPassword` key to the key you copied in step 4. **Note:** In a production-grade application, follow [secret management](https://github.com/dapr/docs/blob/master/concepts/components/secrets.md) instructions to securely manage your secrets.
+1. 打开 [此链接](https://ms.portal.azure.com/#create/Microsoft.Cache) 开始配置Redis缓存。如果需要请先登陆。
+2. 填写必要的信息，并勾选**check the "Unblock port 6379" box**, 这允许你使用非SSL来持久化状态。
+3. 点击"Create"开始部署Redis实列。
+4. 一旦你的实例创建完成，你需要赋予你的访问密钥，导航到"Settings"下的"Access Keys"，拷贝你的密钥。
+5. 运行 `kubectl get svc`，并拷贝redis-master的集群IP。
+6. 最后, 你需要添加你的Key及Redis地址到`redis.yaml`文件，如果你只是运行一个示例，你可以添加到提供的`redis.yaml`文件。如果你是从头开始创建一个项目，你可参考[配置](#configuration)创建 `redis.yaml`。然后设置`redisHost`为 `[上一步骤获取到的集群IP]:6379` 以及 `redisPassword` 为第四步骤获取的访问密钥。**注意:** 在基于生产环境的应用，参考[机密管理](https://github.com/dapr/docs/blob/master/concepts/components/secrets.md)介绍来管理你的机密。
 
-> **NOTE:** Dapr pub/sub uses [Redis Streams](https://redis.io/topics/streams-intro) that was introduced by Redis 5.0, which isn't currently available on Azure Managed Redis Cache. Consequently, you can use Azure Managed Redis Cache only for state persistence.
+> **注意:** Dapr发布/订阅使用[Redis流](https://redis.io/topics/streams-intro)，此功能在Redis 5.0中引入, 目前Azure托管的Redis缓存尚不支持，因此，你只能使用Azure托管Redis缓存作为状态持久化存储。
 
 
 
-### Other ways to Create a Redis Database
+### 创建Redis数据库的其他方式
 
 - [AWS Redis](https://aws.amazon.com/redis/)
 - [GCP Cloud MemoryStore](https://cloud.google.com/memorystore/)
 
-## Configuration
+## 配置
 
-Dapr can use Redis as a `statestore` component (for state persistence and retrieval) or as a `messagebus` component (for pub/sub). The following yaml files demonstrates how to define each. **Note:** yaml files below illustrate secret management in plain text. In a production-grade application, follow [secret management](https://github.com/dapr/docs/blob/master/concepts/components/secrets.md) instructions to securely manage your secrets.
+Dapr可使用Redis作为`statestore`组件 (针对状态持久化或恢复) 或 `messagebus` 组件 (针对发布/订阅)。 以下yaml文件演示如何定义它们。 **注意:** 以下yaml文件使用纯文本作为机密管理，在基于生产环境的应用中，请参考[机密管理](https://github.com/dapr/docs/blob/master/concepts/components/secrets.md) 说明来管理你的机密。
 
-### Configuring Redis for State Persistence and Retrieval
+### 配置Redis作为状态持久化及恢复组件
 
-Create a file called redis-state.yaml, and paste the following:
+创建一个名称为redis-state.yaml的文件, 粘贴以下内容:
 
 ```yaml
 apiVersion: dapr.io/v1alpha1
@@ -75,9 +75,9 @@ spec:
     value: <PASSWORD>
 ```
 
-### Configuring Redis for Pub/Sub
+### 配置Redis作为发布/订阅组件
 
-Create a file called redis-pubsub.yaml, and paste the following:
+创建一个名称为redis-pubsub.yaml文件, 粘贴以下内容:
 
 ```yaml
 apiVersion: dapr.io/v1alpha1
@@ -93,7 +93,7 @@ spec:
     value: <PASSWORD>
 ```
 
-## Apply the configuration
+## 应用配置
 
 ### Kubernetes
 
@@ -103,6 +103,6 @@ kubectl apply -f redis-state.yaml
 kubectl apply -f redis-pubsub.yaml
 ```
 
-### Standalone
+### 独立方式
 
-By default the Dapr CLI creates a local Redis instance when you run `dapr init`. However, if you want to configure a different Redis instance, create a directory named `components` in the root path of your Dapr binary and then copy your `redis.yaml` into that directory.
+在默认情况下，Dapr命令行在你运行`dapr init`命令时会自动创建一个默认的Redis实例。不过，如果你想要配置不同的Redis实例，可在Dapr根目录下的components目录中，放入`redis.yaml`文件。
