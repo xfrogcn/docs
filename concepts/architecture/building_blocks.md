@@ -1,15 +1,14 @@
-# Building blocks
+# 构建块
 
-Dapr consists of a set of building blocks that can be called from any programming language through Dapr HTTP or gRPC APIs. These building blocks address common challenges in building resilient, microservices applications. And they capture and share best practices and patterns that empower distributed application developers. 
+Dapr由一系列可由任何语言通过HTTP或gRPC调用的构建块组成。这些构建块解决了构建弹性微服务应用的常见挑战，并共享了最佳实践和模式，以增强开发者开发分布式应用的能力。
 
-![Dapr building blocks](../../images/overview.png)
+![Dapr构建块](../../images/overview.png)
 
-## Anatomy of a building block
+## 解析构建块
 
-Both Dapr spec and Dapr runtime are designed to be extensible 
-to include new building blocks. A building block is comprised of the following artifacts:
+Dapr规范及Dapr运行时都被设计为可扩展增加新的构建块。构建块由以下构件组件：
 
-* Dapr spec API definition. A newly proposed building block shall has its API design incorporated into the Dapr spec. 
-* Components. A building block may reuse existing [Dapr components](../components), or introduce new components.
-* Test suites. A new building block implementation should come with associated unit tests and end-to-end scenario tests.
-* Documents and samples. 
+* Dapr API规范定义。新的构建块应该将其API设计纳入Dapr规范。
+* 组件。构建块可能使用已存在的[Dapr组件](../components), 或者引入新的组件。
+* 测试套件。新的构建块应该实现单元测试及端到端的场景测试。
+* 文档及示例。 
