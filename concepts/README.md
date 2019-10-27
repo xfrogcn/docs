@@ -34,7 +34,7 @@
 
 ## 角色
 
-* [概览]](./actor/actor_overview.md)
+* [概览](./actor/actor_overview.md)
 * [功能](./actor/actors_features.md)
 
 ## 扩展性

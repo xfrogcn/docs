@@ -1,37 +1,36 @@
-# Publish/Subscribe Messaging
+# 发布/订阅消息
 
-Dapr enables developers to design their application with a pub/sub pattern using a message broker, where event consumers and producers are decoupled from one another, and communicate by sending and receiving messages that are associated with a namespace, usually in the form of topics.
+通过Dapr开发者可设计使用消息代理的发布/订阅模式应用，这样事件的消费者与生产者彼此解耦，发送与接收消息之间的通信通过命名空间隔离（通常为主题）。
 
-This allows event producers to send messages to consumers that aren't running, and consumers to receive messages based on subscriptions to topics.
+这允许事件生产者发送消息到未运行的消费者，消费者通过订阅主题的方式来接收消息。
 
-Dapr provides At-Least-Once messaging guarantees, and integrates with various message brokers implementations.
-These implementations are pluggable, and developed outside of the Dapr runtime in [components-contrib](https://github.com/dapr/components-contrib/tree/master/pubsub).
+Dapr提供至少一次的消息传递保证，以及可与多个消息代理集成。
+这些实现时插件化的，与Dapr运行时独立[components-contrib](https://github.com/dapr/components-contrib/tree/master/pubsub).
 
-## Publish/Subscribe API
+## 发布/订阅 API
 
-The API for Publish/Subscribe can be found in the [spec repo](../../reference/api/pubsub.md).
+有关发布/订阅的API，可在[规范](../../reference/api/pubsub.md)中查看
 
-## Behavior and Guarantees
+## 行为及保证
 
-Dapr guarantees At-Least-Once semantics for message delivery.
-That is, when an application publishes a message to a topic using the Publish/Subscribe API, it can assume the message is delivered at least once to any subscriber when the response status code from that endpoint is `200`, or returns no error if using the gRPC client.
+Dapr确保至少一次的消息传递。这意味着，当一个应用发布一条消息到主题时，可以假设任何订阅者都可以至少一次成功处理该消息, 也就是订阅者终结点返回200 HTTP应答，或者gRPC没有错误返回。
 
-The burden of dealing with concepts like consumer groups and multiple instances inside consumer groups is all catered for by Dapr.
+处理消费者组以及组内多个实例的责任都由Dapr来完成。
 
-### App ID
+### 应用ID
 
-Dapr has the concept of an `id`. This is specified in Kubernetes using the `dapr.io/id` annotation and with the `app-id` flag using the Dapr CLI. Dapr requires an ID to be assigned to every application.
+Dapr具有`id`的概念，它在Kubernetes中通过`dapr.io/id`注释来表示，在Dapr命令行中通过`app-id`参数指定。Dapr中每个应用都必须具有一个ID。
 
-When multiple instances of the same application ID subscribe to a topic, Dapr will make sure to deliver the message to only one instance. If two different applications with different IDs subscribe to a topic, at least one instance in each application receives a copy of the same message.
+当具有相同应用ID的多个实例订阅一个主题时，Dapr将确保传递的消息只会到其中的一个实例。如果两个具有不同ID的应用同时订阅一个主题，每一个应用中的至少一个实例将会收到消息。
 
-## Cloud Events
+## 云事件
 
-Dapr follows the [Cloud Events 0.3 Spec](https://github.com/cloudevents/spec/tree/v0.3) and wraps any payload sent to a topic inside a Cloud Events envelope.
+Dapr遵循[云事件0.3规范](https://github.com/cloudevents/spec/tree/v0.3) ，将发送到主题的任何负载都由一个云事件邮封封装。
 
-The following fields from the Cloud Events spec are implemented with Dapr:
+以下云事件规范中的字段已被Dapr实现：
 
 * `id`
 * `source`
 * `specversion`
 * `type`
-* `datacontenttype` (Optional)
+* `datacontenttype` (可选)
