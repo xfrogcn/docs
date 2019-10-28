@@ -1,72 +1,74 @@
-# Introduction to Actors
+# 角色介绍
 
-Dapr runtime provides an actor implementation which is based on Virtual Actor pattern. The Dapr Actors API provides a single-threaded programming model leveraging the scalability and reliability guarantees provided by underlying platform on which Dapr is running.
+Dapr运行时提供了基于虚拟角色模式的角色实现。Dapr角色API提供了一个单线程编程模型，该模型结合了Dapr所运行的底层平台所提供的可伸缩性和可靠性保证。
 
-## What are Actors?
+## 什么是角色?
 
-An actor is an isolated, independent unit of compute and state with single-threaded execution. 
+角色是一个单独的、独立的计算和状态单元，它使用单线程执行。
 
-The [actor pattern](https://en.wikipedia.org/wiki/Actor_model) is a computational model for concurrent or distributed systems in which a large number of these actors can execute simultaneously and independently of each other. Actors can communicate with each other and they can create more actors.
+[角色模式](https://en.wikipedia.org/wiki/Actor_model)是并发或分布式系统的一种计算模式，它允许大量的角色同时并相互独立地运行。角色之间可以相互通讯，也可创建更多的角色。
 
-### When to use Actors
+### 什么时候使用角色
 
-Dapr Actors is an implementation of the actor design pattern. As with any software design pattern, the decision whether to use a specific pattern is made based on whether or not a software design problem fits the pattern.
+Dapr角色实现了角色设计模式。与其它软件设计模式一样，是否使用某种特定的设计模式取决于软件设计的目的是否适合该模式。
 
-Although the actor design pattern can be a good fit to a number of distributed systems problems and scenarios, careful consideration of the constraints of the pattern and the framework implementing it must be made. As general guidance, consider the actor pattern to model your problem or scenario if:
+尽管角色设计模式可以很好地适应大多数分布式系统问题及场景，也必须谨慎考虑该模式的约束条件以及一定要实现的框架。通常情况下，满足以下场景可考虑使用角色模式：
 
-* Your problem space involves a large number (thousands or more) of small, independent, and isolated units of state and logic.
-* You want to work with single-threaded objects that do not require significant interaction from external components, including querying state across a set of actors.
-* Your actor instances won't block callers with unpredictable delays by issuing I/O operations.
+* 你的问题空间包含大量（上千或更多）小的、无依赖的、独立的状态及逻辑单元。
+* 你想要以单线程对象方式工作，它无需与外部组件的重要交互（包括查询一系列角色的状态）。
+* 你的角色实例不会通过I/O操作来阻塞调用者，造成不可预知的延迟。
 
-## Actors in Dapr
+## Dapr中的角色
 
-Every actor is defined as an instance of an actor type, identical to the way an object is an instance of a class. For example, there may be an actor type that implements the functionality of a calculator and there could be many actors of that type that are distributed on various nodes across a cluster. Each such actor is uniquely identified by an actor ID.
+每一个角色是一种角色类型的一个实例，就像对象是一种类的实例一样。例如，有一种实现了计算功能的角色类型，它对应的角色实例可能分布到集群中的多个节点上。每一个角色由唯一的角色ID标识。
 
-## Actor Lifetime
+## 角色生命周期
 
-Dapr actors are virtual, meaning that their lifetime is not tied to their in-memory representation. As a result, they do not need to be explicitly created or destroyed. The Dapr Actors runtime automatically activates an actor the first time it receives a request for that actor ID. If an actor is not used for a period of time, the Dapr Actors runtime garbage-collects the in-memory object. It will also maintain knowledge of the actor's existence should it need to be reactivated later. For more details, see Actor lifecycle and garbage collection.
+Dapr角色是虚拟的，这意味着它的生命周期与它的内存表示无关。也就是说，它们无需显式地创建或销毁。Dapr角色运行时在第一次收到某个角色ID时，将会自动创建角色实例。如果一个角色在一段时间内未被使用，Dapr角色运行时将回收内存中的对象。同时，运行时也会维持那些需要在之后重新激活的角色状态。有关更多信息，参考角色生命周期及垃圾回收。
 
-This virtual actor lifetime abstraction carries some caveats as a result of the virtual actor model, and in fact the Dapr Actors implementation deviates at times from this model.
+作为虚拟角色模型的结果，这种虚拟角色生命周期抽象带来了一些警告，实际上Dapr实现的角色模式有时候会偏离这个模型。
 
-An actor is automatically activated (causing an actor object to be constructed) the first time a message is sent to its actor ID. After some period of time, the actor object is garbage collected. In the future, using the actor ID again, causes a new actor object to be constructed. An actor's state outlives the object's lifetime as state is stored in configured state provider for Dapr runtime.
+角色是自动激活的（引发一个角色对象被构造），这发生在首次收到角色ID的消息请求。在过一段时间之后，角色对象被回收，之后，如果再次使用这个角色ID，将会再次构造一个角色对象，由于角色的状态是存放到Dapr运行时中所配置的状态提供器中，所以它存在的时间会比角色实例对象本身更长。
 
-## Distribution and failover
-To provide scalability and reliability, actors instances are distributed throughout the cluster and automatically migrates them from failed nodes to healthy ones as required.
+## 分布式及故障转移
 
-Actors are distributed across the pods of the Actor Service, and those pods are distributed across the nodes in a cluster. Each service instance contains a set of actors.
+为了提供可伸缩性及可靠性，角色实例分布到整个集群中，并根据需要自动将它们从故障节点迁移到正常节点。
 
-The Dapr Actor runtime manages distribution scheme and key range settings for you. This simplifies some choices but also carries some consideration:
+角色分布到角色服务的各个Pod中，这些Pod分布到集群中的不同节点。每一个服务实例包含一组角色。
 
-* By default, actors are randomly placed into pods resulting in uniform distribution.
-* Because actors are randomly placed, it should be expected that actor operations will always require network communication, including serialization and deserialization of method call data, incurring latency and overhead.
+Dapr角色运行时管理分配方案以及键区间，这简化了选择，但也带来了一些考虑：
 
-## Actor communication
+* 默认情况下，角色被随机放置到Pod中以便实现均匀分布。
+* 由于角色是随机分配，这将导致角色的操作总是需要网络通信，包括序列化及反序列化，这会增加延迟的开销。
 
-You can interact with Dapr to invoke the actor method by calling Http/gRPC endpoint
+## 角色间通讯
+
+你可以通过Http/gRPC终结点来调用角色方法。
 
 ```
 POST/GET/PUT/DELETE http://localhost:3500/v1.0/actors/<actorType>/<actorId>/method/<method>
 ```
 
-You can provide any data for actor method in the request body and response for the request would be in response body which is data from actor call.
+你可以在请求体中提供调用角色方法的任何数据，而请求的响应体中会包含调用角色的应答数据。
 
-Refer [dapr spec](../../reference/api/actors.md) for more details.
+参考 [dapr规范](../../reference/api/actors.md)了解更多详情。
 
-### Concurrency
+### 并发
 
-The Dapr Actors runtime provides a simple turn-based access model for accessing actor methods. This means that no more than one thread can be active inside an actor object's code at any time. Turn-based access greatly simplifies concurrent systems as there is no need for synchronization mechanisms for data access. It also means systems must be designed with special considerations for the single-threaded access nature of each actor instance.
+Dapr角色运行时提供了简单的回合制模型来访问角色方法，这意味着在角色对象内部，在任何时候都不可能有超过一个线程。回合制访问极大地简化了并发系统而无需考虑数据访问的同步机制。这也意味着在设计系统时，必须考虑每个角色的单线程访问特性。
 
-A single actor instance cannot process more than one request at a time. An actor instance can cause a throughput bottleneck if it is expected to handle concurrent requests.
+单个角色实例在同一时间无法处理超过一个的请求，如果希望角色实例处理并发请求，则它可能导致吞吐量瓶颈。
 
-Actors can deadlock on each other if there is a circular request between two actors while an external request is made to one of the actors simultaneously. The Dapr actor runtime will automatically time out on actor calls and throw an exception to the caller to interrupt possible deadlock situations.
+如果两个角色之间有相互调用，而角色同时向对方发出外部请求，那么角色之间可能会出现死锁。Dapr角色运行时将会自动超时角色调用，并向调用者抛出异常来中断可能的死锁情况。
 
-![](../../images/actors_communication.png)
+![角色通讯](../../images/actors_communication.png)
 
-### Turn-based access
-A turn consists of the complete execution of an actor method in response to a request from other actors or clients, or the complete execution of a timer/reminder callback. Even though these methods and callbacks are asynchronous, the Dapr Actors runtime does not interleave them. A turn must be fully finished before a new turn is allowed. In other words, an actor method or timer/reminder callback that is currently executing must be fully finished before a new call to a method or callback is allowed. A method or callback is considered to have finished if the execution has returned from the method or callback and the task returned by the method or callback has finished. It is worth emphasizing that turn-based concurrency is respected even across different methods, timers, and callbacks.
+### 回合制的访问
 
-The Dapr Actors runtime enforces turn-based concurrency by acquiring a per-actor lock at the beginning of a turn and releasing the lock at the end of the turn. Thus, turn-based concurrency is enforced on a per-actor basis and not across actors. Actor methods and timer/reminder callbacks can execute simultaneously on behalf of different actors.
+一个回合包含完整地执行一个角色方法来响应其他角色或客户端的请求，或者完整地执行一个定时器/唤醒回调。即使这些方法和回调是异步的，Dapr运行时也不会交错他们。一个回合必须完全完成之后才允许开始新的回合。换句话说，当前执行的角色方法或定时器/唤醒回调必须全部完成后，才会处理下一个新的方法或回调。如果从该方法或回调返回的执行已经完成，并且该方法或回调返回的任务已经完成，则认为该方法或回调已经完成，值得强调的是，即使在不同的方法、定时器和回调之间，基于回合的并发也是必须的。
 
-The following example illustrates the above concepts. Consider an actor type that implements two asynchronous methods (say, Method1 and Method2), a timer, and a reminder. The diagram below shows an example of a timeline for the execution of these methods and callbacks on behalf of two actors (ActorId1 and ActorId2) that belong to this actor type.
+Dapr actor运行时通过在回合开始时获取每个角色的锁并在轮询结束时释放锁来实现基于回合的并发性。因此，基于回合的并发性是在每个角色的基础上实现的，而不是在角色之间。在不同角色中的方法以及定时器/唤醒回调可以同时执行。
 
-![](../../images/actors_concurrency.png)
+以下示例阐述了上述概念，一个角色类型实现了两个异步方法（即，Method1及Method2）,一个定时器，一个唤醒器。下图显示了代表属于这个角色类型的两个参与者(ActorId1和ActorId2)执行这些方法和回调的时间线示例。
+
+![角色并发](../../images/actors_concurrency.png)
