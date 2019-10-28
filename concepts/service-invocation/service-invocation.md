@@ -1,29 +1,29 @@
-# Service Invocation 
+# 服务调用 
 
-Dapr-enabled apps can communicate with each other through well-known endpoints in the form of http or gRPC messages.
+支持Dapr的应用可通过已知终结点使用http或gRPC消息通讯。
 
-![Service Invocation Diagram](../../images/service-invocation.png)
+![服务调用图示](../../images/service-invocation.png)
 
+1. 服务A发起一个到服务B的http/gRPC调用，调用将会到达本地的Dapr sidecar。
+2. Dapr查找服务B的位置，并将消息发送到服务B的Dapr sidecar。
+3. 服务B的sidecar将请求转发给服务B，服务B处理业务逻辑。
+4. 服务B发送应答到服务A，应答将会达到服务B sidecar。
+5. Dapr转发应答到服务A的sidecar。
+6. 服务A受到应答。
 
-1. Service A makes a http/gRPC call meant for Service B.  The call goes to the local Dapr sidecar.  
-2. Dapr discovers Service B's location and forwards the message to Service B's Dapr sidecar
-3. Service B's Dapr sidecar forwards the request to Service B.  Service B performs its corresponding business logic.
-4. Service B sends a response for Service A.  The response goes to Service B's sidecar.
-5. Dapr forwards the response to Service A's Dapr sidecar.
-6. Service A receives the response.
+作为上述所有应用程序的一个示例，假设我们有以下示例中描述的应用程序集合，其中python应用程序调用Node.js应用程序:https://github.com/dapr/samples/blob/master/2.hello-kubernetes/README.md
 
-As an example for all the above, suppose we have the collection of apps described in the following sample, where a python app invokes a Node.js app: https://github.com/dapr/samples/blob/master/2.hello-kubernetes/README.md
+在这个场景中，python应用为服务A，Node.js应用为服务B。
 
-In such a scenario, the python app would be "Service A" above, and the Node.js app would be "Service B".
+下面在这个示例的上下文中再次描述了项目1-6:
 
-The following describes items 1-6 again in the context of this sample:
-1. Suppose the Node.js app has a Dapr app id of "nodeapp", as in the sample.  The python app invokes the Node.js app's `neworder` method by posting `http://localhost:3500/v1.0/invoke/nodeapp/method/neworder`, which first goes to the python app's local Dapr sidecar.
-2. Dapr discovers the Node.js app's location and forwards it to the Node.js app's sidecar.
-3. The Node.js app's sidecar forwards the request to the Node.js app.  The Node.js app performs its business logic, which, as described in the sample, is to log the incoming message and then persist the order ID into Redis (not shown in the diagram above).
+1. 假设Node.js应用程序的Dapr应用程序id为“nodeapp”，如示例中所示。python应用调用Node.js应用的`neworder`方法，可通过post `http://localhost:3500/v1.0/invoke/nodeapp/method/neworder`, 它首先达到python应用的本地Dapr sidecar。
+2. Dapr找到Node.js的位置，并转发请求到Node.js应用的sidecar。
+3. Node.js应用的sidecar转发请求到Node.js应用，Node.js应用处理其业务逻辑，就像示例中描述的一样，它将记录消息请求并持久化订单ID到Redis（未展示在上述图示中）。
 
-Steps 4-5 are the same as the list above.
+步骤4-5与上述列表一致。
 
+更多信息请参考：
 
-For more information, see:
-- The [Service Invocation Spec](../../reference/api/service_invocation.md)
-- A [HowTo]() on Service Invocation
+- [服务调用规范](../../reference/api/service_invocation.md)
+- 有关服务调用的[如何...]()教程
