@@ -1,21 +1,22 @@
-# Dapr Actors Runtime 
+# Dapr角色运行时
 
-Dapr Actors runtime provides following capabilities:
+Dapr角色运行时提供以下功能：
 
-## Actor State Management
- Actors can save state reliably using state management capability.
+## 角色状态管理
 
- You can interact with Dapr through Http/gRPC endpoints for state management.
+ 角色可通过状态管理能力可靠地保存状态。
 
- ### Save the Actor State
+ 你可以通过Http/gRPC终结点与Dapr交互来进行状态管理。
 
-You can save the Actor state of a given key of actorId of type actorType by calling
+### 保存角色状态
+
+你可以通过一个键来保存某个角色类型下特定ID角色的状态，通过以下方式：
 
 ```
 POST/PUT http://localhost:3500/v1.0/actors/<actorType>/<actorId>/state/<key>
 ```
 
-Value of the key is passed as request body.
+键对应的值通过请求体传递。
 
 ```
 {
@@ -23,90 +24,91 @@ Value of the key is passed as request body.
 }
 ```
 
-If you want to save multiple items in a single transaction, you can call 
+如果你想在单一事务中保存多个项，可以调用：
 
 ```
 POST/PUT http://localhost:3500/v1.0/actors/<actorType>/<actorId>/state
 ```
 
-### Retrieve the Actor State
+### 获取角色状态
 
-Once you have saved the actor state, you can retrieve the saved state by calling 
+一旦你保存了角色的状态，你可以通过以下方式获取到：
 
 ```
 GET http://localhost:3500/v1.0/actors/<actorType>/<actorId>/state/<key>
 ```
 
-### Remove the Actor State
+### 移除角色状态
 
-You can remove state permanently from the saved Actor state by calling
+你可以通过以下方式永久性移除角色状态：
 
 ```
 DELETE http://localhost:3500/v1.0/actors/<actorType>/<actorId>/state/<key>
 ```
 
-Refer [dapr spec](../../reference/api/actors.md) for more details.
+参考 [dapr规范](../../reference/api/actors.md)了解更多信息。
 
-## Actor Timers and Reminders
-Actors can schedule periodic work on themselves by registering either timers or reminders.
+## 角色定时器及唤醒器
 
-### Actor timers
+角色可以通过注册定时器或唤醒器的方式来实现计划执行。
 
-You can register a callback on actor to be executed based on timer.
+### 角色定时器
 
-Dapr Actor runtime ensures that the callback methods respect the turn-based concurrency guarantees.This means that no other actor methods or timer/reminder callbacks will be in progress until this callback completes execution.
+你可以注册一个回调角色来实现基于计时器的执行。
 
-The next period of the timer starts after the callback completes execution. This implies that the timer is stopped while the callback is executing and is started when the callback finishes.
+Dapr角色运行时确保回调方法遵循基于回合的并发保证。这意味着在回调执行完成之前，该角色的其他方法或定时/唤醒器回调不会被执行。
 
-The Dapr Actors runtime saves changes made to the actor's state when the callback finishes. If an error occurs in saving the state, that actor object will be deactivated and a new instance will be activated.
+在回调完成之后，计时器的下一个周期开始。这意味着计时器在回调执行时将会停止，而在回调完成后继续计时。
 
-All timers are stopped when the actor is deactivated as part of garbage collection. No timer callbacks are invoked after that. Also, the Dapr Actors runtime does not retain any information about the timers that were running before deactivation. It is up to the actor to register any timers that it needs when it is reactivated in the future.
+Dapr角色运行时在回调完成时保存角色状态的变更，如果在保存状态时发生错误，角色对象将会被注销然后创建新的角色实例。
 
-You can create a timer for an actor by calling the Http/gRPC request to Dapr.
+所有定时器将会在角色被垃圾回收销毁后停止，在这之后不会调用计时器回调。Dapr角色运行时不会保留关于停用之前正在运行的计时器的任何信息。角色在将来被重新激活时，有角色来注册任何需要的定时器。
+
+你可以通过以下接口为一个角色创建一个定时器：
 
 ```
 POST,PUT http://localhost:3500/v1.0/actors/<actorType>/<actorId>/timers/<name>
 ```
 
-You can provide the timer due time and callback in the request body.
+你可以通过请求体指定定时器时间以及回调。
 
-You can remove the actor timer by calling
+要移除角色定时器可以调用：
 
 ```
 DELETE http://localhost:3500/v1.0/actors/<actorType>/<actorId>/timers/<name>
 ```
 
-Refer [dapr spec](../../reference/api/actors.md) for more details.
+参考[dapr规范](../../reference/api/actors.md)了解更多信息。
 
-### Actor reminders
+### 角色唤醒器
 
-Reminders are a mechanism to trigger persistent callbacks on an actor at specified times. Their functionality is similar to timers. But unlike timers, reminders are triggered under all circumstances until the actor explicitly unregisters them or the actor is explicitly deleted. Specifically, reminders are triggered across actor deactivations and failovers because the Dapr Actors runtime persists information about the actor's reminders using Dapr actor state provider. 
+唤醒器是角色在指定时间触发持久化回调的机制，在功能上与定时器类似，但是与定时器不同的是，唤醒器会在任何情况下被触发，直到角色显示地注销或删除。另外，唤醒器是跨角色失活及故障转移的，因为Dapr角色运行时将会使用Dapr角色状态提供器保存角色唤醒器信息。
 
-You can create a persistent reminder for an actor by calling the Http/gRPC request to Dapr.
+你可以通过以下请求为角色创建一个持久化的唤醒器：
 
 ```
 POST,PUT http://localhost:3500/v1.0/actors/<actorType>/<actorId>/reminders/<name>
 ```
 
-You can provide the reminder due time and period in the request body.
+你可以通过请求体提供唤醒器保留时间及其周期。
 
-#### Retrieve Actor Reminder
+#### 获取角色唤醒器
 
-You can retrieve the actor reminder by calling
+可通过以下方式获取角色唤醒器：
 
 ```
 GET http://localhost:3500/v1.0/actors/<actorType>/<actorId>/reminders/<name>
 ```
 
-#### Remove the Actor Reminder
+#### 移除角色唤醒器
 
-You can remove the actor reminder by calling
+你可以通过以下方式移除唤醒器：
 
 ```
 DELETE http://localhost:3500/v1.0/actors/<actorType>/<actorId>/reminders/<name>
 ```
 
-Refer [dapr spec](../../reference/api/actors.md) for more details.
+参考 [dapr规范](../../reference/api/actors.md)了解更多信息。
 
 
 
