@@ -1,41 +1,41 @@
-# Security 
+# 安全
 
-## Dapr-to-app communication
+## Dapr与应用的通讯
 
-Dapr sidecar runs close to the application through **localhost**. Dapr assumes it runs in the same security domain of the application. So, there are no authentication, authorization or encryption between a Dapr sidecar and the application. 
+Dapr sidecar通过**localhost**与应用绑定运行。Dapr假设它在与应用相同的安全域下运行，所以，在Dapr sidecar与应用之间的通讯没有认证，授权或者加密。
 
-## Dapr-to-Dapr communication
+## Dapr与Dapr间的通讯
 
-Dapr is designed for inter-component communications within an application. Dapr assumes these application components reside within the same trust boundary. Hence, Dapr doesn't secure across-Dapr communications by default.
+Dapr是作为应用内部组件通讯来设计的，Dapr假设这些应用组件都在相同的信任边界中，因此，Dapr默认不提供Dapr间的通讯的保护。
 
-However, in a multi-tenant environment, a secured communication channel among Dapr sidecars becomes necessary. Supporting TLS and other authentication, authorization, and encryption methods is on the Dapr roadmap.
+不过，在多租户环境下，Dapr sidecar之间的安全通讯就很需要了。Dapr路线图中准备提供TLS以及其它认证、授权、加密方法的支持。
 
-An alternative is to use service mesh technologies such as [Istio]( https://istio.io/) to provide secured communications among your application components. Dapr works well with popular service meshes. 
+另一种可选方案是使用服务网格技术，如[Istio]( https://istio.io/) 来提供应用组件之间的安全通讯，Dapr可与流行的服务网格一起很好地工作。
 
-By default, Dapr supports Cross-Origin Resource Sharing (CORS) from all origins. You can configure Dapr runtime to allow only specific origins.  
+默认情况下，Dapr支持全来源的跨域资源共享（CORS），你可以配置Dapr运行时只允许特定的来源。
 
-## Network security
+## 网络安全
 
-You can adopt common network security technologies such as network security groups (NSGs), demilitarized zones (DMZs) and firewalls to provide layers of protections over your networked resources. 
+你可以采用常见的网络安全技术，如网络安全组（NSGs），高安全区（DMZs）以及防火墙来为你的网络提供多层保护。
 
-For example, unless configured to talk to an external binding target, Dapr sidecars don’t open connections to the Internet. And most binding implementations use outbound connections only. You can design your firewall rules to allow outbound connections only through designated ports. 
+例如，除非配置为与外部绑定目标交互，否则Dapr sidecar不会打开因特网连接。大多数绑定只实现出站连接，可以将防火墙规则设计为只允许通过指定端口进行出站连接。
 
-## Bindings security
+## 绑定安全
 
-Authentication with a binding target is configured by the binding’s configuration file. Generally, you should configure the minimum required access rights. For example, if you only read from a binding target, you should configure the binding to use an account with read-only access rights.
+绑定目标的身份验证由绑定的配置文件配置,通常，你应该配置最小的访问权限，例如，如果你只需要从绑定目标读取，你应该配置绑定使用一个具有只读权限的账号。
 
-## State store security
+## 状态存储安全
 
-Dapr doesn't transform the state data from applications. This means Dapr doesn't attempt to encrypt/decrypt state data. However, your application can adopt encryption/decryption methods of your choice, and the state data remains opaque to Dapr. 
+Dapr不会转换应用的状态数据，这意味着Dapr不会尝试加密/解密状态数据。不过，你的应用可以选择采取自己的加密/解密方法，这样状态数据对Dapr仍然是不透明的。
 
-Dapr uses the configured authentication method to authenticate with the underlying state store. And many state store implementations use official client libraries that generally use secured communication channels with the servers.
+Dapr使用配置的认证方法来认证底层的状态存储, 许多状态存储实现使用官方客户端库，这些客户端库通常使用与服务器之间的安全通信通道。
 
-## Management security
+## 管理安全
 
-When deploying on Kubernetes, you can use regular [Kubernetes RBAC]( https://kubernetes.io/docs/reference/access-authn-authz/rbac/) to control access to management activities. 
+当在Kubernetes中部署，你可以使用标准的[Kubernetes RBAC(基于角色的访问控制)]( https://kubernetes.io/docs/reference/access-authn-authz/rbac/)来控制管理活动。
 
-When deploying on Azure Kubernetes Service (AKS), you can use [Azure Active Directory (AD) service principals]( https://docs.microsoft.com/en-us/azure/active-directory/develop/app-objects-and-service-principals) to control access to management activities and resource management.
+当部署在Azure Kubernetes Service (AKS)，你可以使用[Azure Active Directory (AD)服务原则]( https://docs.microsoft.com/en-us/azure/active-directory/develop/app-objects-and-service-principals) 来控制管理活动及资源管理。
 
-## Component secrets
+## 组件机密
 
-Dapr components uses Dapr's built-in secret management capability to manage secrets. Please see the [secret topic](../components/secrets.md) for more details.
+Dapr组件使用Dapr内建的机密管理能力来管理机密，请参考[机密主题](../components/secrets.md)了解更多信息。
