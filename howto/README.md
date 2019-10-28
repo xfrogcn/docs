@@ -1,32 +1,39 @@
-# How Tos
+# 如何做
 
-Here you'll find a list of How To guides that walk you through accomplishing specific tasks.
+在这里你会发现一个如何指导你完成特定任务的列表。
 
-### Service invocation
-* [Invoke other services in your cluster or environment](./invoke-and-discover-services)
-* [Create a gRPC enabled app, and invoke Dapr over gRPC](./create-grpc-app)
+### 服务调用
 
-### State Management
-* [Setup Dapr state store](./setup-state-store)
-* [Create a service that performs stateful CRUD operations](./create-stateful-service)
-* [Query the underlying state store](./query-state-store)
-* [Create a stateful, replicated service with different consistency/concurrency levels](./stateful-replicated-service)
-* [Control your app's throttling using rate limiting features](./control-concurrency)
+* [在你的集群或环境中调用其他服务](./invoke-and-discover-services)
+* [创建一个允许gRPC的应用，并通过gRPC调用Dapr](./create-grpc-app)
 
-### Pub/Sub
-* [Setup Dapr Pub/Sub](./setup-pub-sub-message-broker)
-* [Use Pub/Sub to publish messages to a given topic](./publish-topic)
-* [Use Pub/Sub to consume events from a topic](./consume-topic)
+### 状态管理
 
-### Resources Bindings
-* [Trigger a service from different resources with input bindings](./trigger-app-with-input-binding)
-* [Invoke different resources using output bindings](./send-events-with-output-bindings)
+* [设置Dapr状态存储](./setup-state-store)
+* [创建有状态的CRUD操作服务](./create-stateful-service)
+* [查询底层状态存储](./query-state-store)
+* [创建具有不同一致性/并发级别的有状态副本服务](./stateful-replicated-service)
+* [使用节流功能控制你的应用流量](./control-concurrency)
 
-### Distributed Tracing
-* [Diagnose your services with distributed tracing](./diagnose-with-tracing)
+### 发布/订阅
 
-### Secrets
-* [Configure secrets using Dapr secret stores](./setup-secret-store)
+* [安装Dapr发布/订阅](./setup-pub-sub-message-broker)
+* [使用发布/订阅发布消息到指定主题](./publish-topic)
+* [使用发布/订阅从主题消费事件](./consume-topic)
 
-### Autoscaling
-* [Autoscale on Kubernetes using KEDA and Dapr bindings](./autoscale-with-keda)
+### 资源绑定
+
+* [使用输入绑定从不同资源触发服务](./trigger-app-with-input-binding)
+* [使用输出绑定调用不同的资源](./send-events-with-output-bindings)
+
+### 分布式跟踪
+
+* [使用分布式跟踪诊断您的服务](./diagnose-with-tracing)
+
+### 安全
+
+* [使用Dapr机密存储配置机密](./setup-secret-store)
+
+### 自动伸缩
+
+* [使用KEDA和Dapr绑定在Kubernetes上进行自动扩展](./autoscale-with-keda)
